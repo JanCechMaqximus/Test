@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blind Test Titulků</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+        table {
+            width: 800px;
+            border-collapse: collapse;
+            background-color: #f0f0f0; /* světle šedé pozadí */
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid black; /* 2px ohraničení */
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .question { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        .options { display: flex; justify-content: space-between; margin-top: 10px; }
+        .option { flex: 1; margin: 0 5px; }
+        select { width: 100%; padding: 5px; }
+        button { display: block; width: 200px; margin: 20px auto; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #exportButton { background-color: #008CBA; }
+        #resetButton { background-color: #f44336; }
+        #showResultsButton { background-color: #4CAF50; }
+        #blindTestForm button[type="submit"] { background-color: #DAA520; }
+    </style>
+</head>
+<body>
+    <h1>SLEPÝ TEST TITULKŮ</h1>
+
+    <table>
+        <tr>
+            <td>
+                Následuje padesát boxů s titulky k článkům. Jeden z nich byl již editorem vymyšlen a na webu dumazahrada.cz použit, další dva jsou generovány umělou inteligencí. Pořadí titulků je rozházené, takže nemají pevné místo, tudíž nemůžete sami odhadnout, který je který. Prosím – přečtěte si vždy tři titulky a pak rozhodněte, který z nich je nejlepší, který je horší a který z nich je nejslabší. Buďte prosím pečliví, abyste nedali třeba ten samý titulek na dvě místa.
+                <br><br>
+                Dole pod všemi boxíky pak KLIKNĚTE POUZE NA ŽLUTÉ TLAČÍTKO ODESLAT HODNOCENÍ.
+                <br><br>
+                Moc děkujeme za spolupráci. Díky tomu budeme moct vyhodnotit, jak kvalitní titulky dělá sama umělá inteligence nikoli na základě nějakých technických parametrů, ale díky subjektivnímu hodnocení lidí, kteří svou redaktorskou či editorskou práci mají v malíku a vědí, co je kvalitní titulek.<br><br>
+Víme, že i když nad tím strávíte nějaký čas, tahle práce nám pomůže vytvořit lepší nastavení umělé inteligence pro to, aby skutečně pomáhala. <br><br>
+Až celý stepý test absolvujete a odešlete hodnocení, napište prosím ihned na jan.cech2@vlmedia.cz informaci, že jste to provedli. Je to pro verifikaci množství testů. Jinak je test zcela anonymní, takže víme jen kdo hodnotil, nikoliv však jak. Děkujeme.
+            </td>
+        </tr>
+    </table>
+
+    <form id="blindTestForm"></form>
+    <button id="exportButton">Exportovat celkové výsledky</button>
+    <button id="resetButton">Resetovat data</button>
+    <button id="showResultsButton">Zobrazit aktuální výsledky</button>
+</body>
+</html>
+
+
+    <script>
+    console.log("Script začíná");
+
+    const titulkyData = [
+            { id: 1, original: "Jak často koupat psa, abyste mu nezpůsobili kožní problémy? Tak málo, jak je to možné!", claude: "Jak často koupat psa? Tady jsou rady, jak udržet vašeho mazlíčka zdravého", chatgpt: "Častým mytím srsti psa mu můžete způsobit vážné zdravotní problémy" },
+{ id: 2, original: "Chcete mít krásně měkké a voňavé ručníky? Jednoduchý návod se skládá ze 4 kroků a 3 triků", claude: "Jak správně prát a sušit ručníky, aby zůstaly měkké a savé.", chatgpt: "Ručníky tvrdé jak struhadlo? Tohle dělejte při praní a sušení a budou zase hebké" },
+{ id: 3, original: "Zákaz topení dřevem na obzoru? Sousedé mohou nahlásit neekologické topení, hrozí vysoké pokuty", claude: "Topení dřevem může brzy přinést vysoké pokuty pro české domácnosti", chatgpt: "Topení dřevem může být brzy problém. Hrozí pokuty i v Česku" },
+{ id: 4, original: "Praní na 40 stupňů poškozuje vaše prádlo. Přečtěte si, jak správně prát, aby vydrželo mnohem déle", claude: "Oblíbená teplota praní ničí vaše oblečení i pračku", chatgpt: "Praní na 40 stupňů je nejhorší, co můžete udělat pro prádlo i pračku" },
+{ id: 5, original: "Zbyly vám cukety? Připravte z nich jednoduchou omáčku na těstoviny, kterou můžete i zamrazit", claude: "Poslední cukety z vaší zahrady proměňte v lahodnou omáčku na těstoviny", chatgpt: "Už nevíte, co s cuketami? Udělejte z nich skvělou omáčku na těstoviny" },
+{ id: 6, original: "Dětská pochoutka je protizánětlivý zázrak. Vzpomenete si, co jste jako malí zobali na louce?", claude: "Nenápadný sléz lesní skrývá poklad pro naše zdraví", chatgpt: "Jako děti jsme jedli plody slézu. Víte, jak je tahle rostlina léčivá?" },
+{ id: 7, original: "Strhnul vám vítr střechu? Víme, co na ní bylo špatně! Podívejte se", claude: "Silný vítr může zničit střechu, ale za škody často může špatná montáž", chatgpt: "Jak zabránit větru, aby vám neodnesl střechu?" },
+{ id: 8, original: "Další revoluce v kuchyni? Jeden přístroj zvládne vše od vaření po pečení. Vyberte si správně", claude: "Multifunkční hrnce nahradí v kuchyni celou armádu spotřebičů", chatgpt: "Papiňák slaví 342 let. Podívejte se, jak se z něj stal multifunkční hrnec" },
+{ id: 9, original: "Zahrada pod nadvládou cikád je minulostí. Takhle se zbavíte škůdců dřív, než bude pozdě", claude: "Romantický zpěv cikád může být pro zahrádkáře noční můrou", chatgpt: "Cikády jsou pro zahradu pohroma. Tohle můžete udělat, abyste se jich zbavili" },
+{ id: 10, original: "Jak bude vypadat výchovné v roce 2025? Čekejte jen symbolické zvýšení částky o pár korun", claude: "Důchodci dostanou od ledna o dvě koruny vyšší výchovné za každé dítě", chatgpt: "Výchovné k důchodu se od ledna 2025 znovu zvýší. O kolik?" },
+{ id: 11, original: "Nechcete infarkt, mozkovou mrtvici ani Alzheimera? Jezte rajčata. Nejlepší jsou ta tepelně upravená", claude: "Rajčata jako zázračný lék proti infarktu a Alzheimerovi", chatgpt: "Rajčata jsou nejlepší prevence infarktu a mrtvice. Ale ne syrová, nýbrž tepelně upravená" },
+{ id: 12, original: "V kolik hodin byste měli chodit spát po čtyřicítce? Vědci přesně vědí, kdy potřebujete ulehnout!", claude: "Vědci odhalili ideální čas pro spánek po čtyřicítce", chatgpt: "V kolik hodin byste měli chodit spát po čtyřicítce? Vědci mají přesnou odpověď" },
+{ id: 13, original: "Chcete mít nejkrásnější zahradu v okolí? Toto musíte udělat na podzim", claude: "Zahrádkáři pozor, podzimní péče o zahradu vám zajistí bohatou úrodu příští rok", chatgpt: "Pět zásadních úkolů, které musíte na zahradě udělat před zimou" },
+{ id: 14, original: "Jak přežít sychravé podzimní dny? Udělejte si to hezké a zútulněte si interiér těmito 5 tipy", claude: "Podzimní útulno: Jak proměnit domov v hřejivé hnízdo plné barev a vůní", chatgpt: "Pět tipů, jak zútulnit interiér na podzim" },
+{ id: 15, original: "Tuto bylinu bychom měli povinně užívat: je proti stresu a úzkostem, na paměť je lepší než ginkgo", claude: "Zapomenutá bylinka z louky léčí 47 nemocí a přináší prorocké sny", chatgpt: "Zapomenutá bylinka z louky léčí 47 nemocí a přináší prorocké sny" },
+{ id: 16, original: "Nejlepší čas na výsadbu kanadských borůvek přichází. Podívejte se, kam a jak je vysadit", claude: "Nadšenci do zahradničení zbystřete, nastal ideální čas pro výsadbu kanadských borůvek", chatgpt: "Teď je nejlepší čas vysadit kanadské borůvky. Takhle to udělejte, jinak neporostou" },
+{ id: 17, original: "Výměna kotlů mění pravidla hry. I vytápění dřevem má svá omezení a rizika", claude: "Topení dřevem škodí zdraví víc než výfukové plyny, tvrdí nová studie", chatgpt: "Vytápění dřevem je prý horší než spalovací motory" },
+{ id: 18, original: "Mýtus o škodlivosti kávy s mlékem padl. Vědci zjistili, že je tato kombinace prospěšná", claude: "Nový výzkum odhaluje překvapivé zdravotní přínosy kávy s mlékem", chatgpt: "Je káva s mlékem opravdu tak škodlivá? Vědci přišli s překvapivým zjištěním" },
+{ id: 19, original: "Šokující rozdíly v cenách energií pro nové a stávající zákazníky: Úspora až 1000 Kč za MWh", claude: "Změna dodavatele energií může ušetřit tisíce korun a není složitá", chatgpt: "Změna dodavatele energií je snadná. Ušetříte tisíce, ale věrnost se nevyplácí" },
+{ id: 20, original: "Obyčejnou zahradu proměnili majitelé na ráj s jezírkem na koupání i potápění", claude: "Ohrobecká zahrada láká vodním rájem a stává se útočištěm pro zvířata", chatgpt: "Zahrada v Ohrobci je rájem pro lidi i zvířata. Podívejte se na to nádherné jezírko" },
+{ id: 21, original: "Podzimní houbařská sezóna je za dveřmi. Podívejte se, které naše houby nejen chutnají, ale také léčí", claude: "Podzimní houby nejen na talíř, ale i jako lék pro vaše tělo", chatgpt: "Tyhle houby jsou lepší než lékárna. Podívejte se, jak vám pomohou" },
+{ id: 22, original: "Chalupy a chaty: Zatímco staré zlevňují, zrekonstruované si svoji cenu drží", claude: "Trh s chatami se rozděluje, zrekonstruované nemovitosti drží cenu a lákají investory", chatgpt: "Ceny chat a chalup se propadají. Podívejte se, co říkají čísla" },
+{ id: 23, original: "Nyní je ideální čas na založení trávníku. Udělejte to přesně takhle a budete mít hustý zelený koberec", claude: "Podzimní výsev trávníku vám zajistí hustou a odolnou zahradu na jaře", chatgpt: "Konec léta je ideální pro založení trávníku. Takhle bude hustý a zdravý" },
+{ id: 24, original: "Zářivé jeřabiny zlepšují imunitu, uleví při nachlazení a prospívají i kloubům. Právě teď je můžete sbírat", claude: "Zázračné jeřabiny vám pomohou s trávením i nachlazením", chatgpt: "Jeřabiny jsou zázračné plody. Podívejte se, s jakými neduhy vám mohou pomoci" },
+{ id: 25, original: "Co jsou kaliny a jak rychle rostou? Objevte fascinující svět těchto rostlin!", claude: "Kaliny promění vaši zahradu v kvetoucí ráj plný ptáků", chatgpt: "Kaliny jsou ozdobou zahrady od jara do podzimu. Poradíme, jak je pěstovat" },
+{ id: 26, original: "Cesta stoletími: Architekti vrátili kutnohorskému domu jeho ztracenou duši", claude: "Kutnohorský dům z 19. století ožil díky citlivé rekonstrukci a moderním prvkům", chatgpt: "Rekonstrukce historického domu v Kutné Hoře vyhrála soutěž Interiér roku" },
+{ id: 27, original: "Interiérové dveře definují prostory v domě i bytě. Frčí sklo, kov i stodolové dveře", claude: "Hornbach radí: Vyberte si dveře, které promění váš domov", chatgpt: "Jaké jsou nejnovější trendy v interiérových dveřích? Podívejte se, co je teď v módě" },
+{ id: 28, original: "Šípky se začínají červenat. Vyrobte si z nich krásné podzimní dekorace", claude: "Šípky jako zářivé ozdoby podzimu vykouzlí v domově útulnou atmosféru", chatgpt: "Šípky už dozrávají. Podívejte se, jak z nich vyrobit krásné dekorace" },
+{ id: 29, original: "Skryté zárubně jsou minimalistické a funkční. Takhle dokážou proměnit váš domov", claude: "Skryté zárubně dobývají moderní interiéry a mění pohled na design dveří", chatgpt: "Znáte tajemství skrytých zárubní? Podívejte se, jak mohou změnit váš interiér" },
+{ id: 30, original: "Plánujete kuchyni snů? Přečtěte si 5 tipů, na které myslet před rekonstrukcí", claude: "Pět klíčových kroků k vysněné kuchyni vás překvapí svou jednoduchostí", chatgpt: "Rekonstrukce kuchyně: Podívejte se, co vše je třeba promyslet" },
+{ id: 31, original: "Nechcete toaletu v koupelně? Zjistěte, jak ji chytře schovat, když nemůžete dělat stavební úpravy", claude: "Chytré triky, jak nenápadně schovat záchod v koupelně", chatgpt: "Jak schovat toaletu v koupelně? Tady je pár šikovných triků" },
+{ id: 32, original: "Jak využít čokoládovou barvu v interiéru? Podívejte se na řadu skvělých příkladů a inspirujte se", claude: "Čokoládová barva v interiéru okouzlí vaše smysly a promění domov v útulnou oázu", chatgpt: "Čokoládová barva v interiéru je nádherná. Ale musíte ji umět kombinovat" },
+{ id: 33, original: "Jednodušší už to ani být nemůže: Zkuste pěstovat dracénu, přežije kdekoliv", claude: "Nenáročná dracéna promění váš domov v tropický ráj", chatgpt: "Dracéna je ideální pokojovka pro líné pěstitele. Podívejte se, jak o ni pečovat" },
+{ id: 34, original: "Sápa: Odhalte tajemství pěstování této nepříliš známé, ale velmi odolné trvalky", claude: "Středomořská kráska sápa okouzlí vaši zahradu i v zimě", chatgpt: "Sápa je trvalka s květy jak z pohádky. Poradíme, jak ji pěstovat" },
+{ id: 35, original: "Chcete zahradu voňavou jako Chanel? Vypěstujte si jasmín!", claude: "Omamná vůně jasmínu vás okouzlí a ještě posílí vaše zdraví", chatgpt: "Jasmín je nádherný keř s omamnou vůní. Takhle ho vypěstujete na zahradě" },
+{ id: 36, original: "Aronie na zahradě je zdraví, které roste přímo před vašima očima. Takhle jej můžete pěstovat", claude: "Superkeř aronie dobývá české zahrady a posiluje zdraví", chatgpt: "Aronie je superpotravina, která roste i v našich zahradách. Podívejte se, jak ji pěstovat" },
+{ id: 37, original: "Popínavky na zahradě: Šplhavé krásky lákají opylovače a chrání před hlukem", claude: "Popínavé rostliny promění vaši zahradu v zelený ráj plný soukromí", chatgpt: "Popínavé rostliny na zahradě: Krása, soukromí a ochrana. Podívejte se, jak je pěstovat" },
+{ id: 38, original: "Jak správně pečovat o bugenvileu: Odkryjte tajemství této nádherné rostliny!", claude: "Tropická kráska bugenvilea rozzáří vaši terasu pestrými barvami", chatgpt: "Jak pěstovat bugenvileu, aby byla plná květů? Tady je návod" },
+{ id: 39, original: "Nejasnosti v novém stavebním zákoně ohrožují stavebnictví, inženýrská komora volá po změnách", claude: "Nový stavební zákon hrozí zhroucením českého stavebnictví", chatgpt: "Stavebnictví je na prahu krize. Inženýři volají po změně zákona" },
+{ id: 40, original: "Nová metoda výstavby slibuje až desetinásobné zrychlení a minimum prostojů", claude: "Revoluční cihlové stěny zrychlí stavbu domu až desetkrát", chatgpt: "Postavte dům za jeden den. Jde to i z cihel" },
+{ id: 41, original: "Zapomeňte na plýtvání energií: Chytré radiátory myslí za vás a přizpůsobí se vašim zvyklostem", claude: "Chytré radiátory vám pomohou ušetřit za topení a ještě chránit přírodu", chatgpt: "Chytré radiátory ušetří za vytápění" },
+{ id: 42, original: "Moderní dům skrývá promyšlené dispoziční řešení a má vše pro komfortní bydlení", claude: "Architekt navrhl luxusní vilu s promyšleným řešením pro soukromí a pohodlí majitelů", chatgpt: "Moderní vila u řeky: Podívejte se na úžasné bydlení, které nabízí soukromí a klid" },
+{ id: 43, original: "Montáž zásuvek na hotovou fasádu je problém. Víme, jak na to bez poškození zateplení", claude: "Elektřina na terase: Jak správně instalovat zásuvky do zateplené fasády", chatgpt: "Zásuvky na terase jsou super. Ale musí být správně udělané" },
+{ id: 44, original: "Joe Jonas investuje do luxusu. Byt v Brooklynu s výhledem na Manhattan Bridge", claude: "Joe Jonas si pořídil luxusní byt v Brooklynu za astronomickou částku", chatgpt: "Podívejte se, v jakém bytě žije slavný Joe Jonas" },
+{ id: 45, original: "Ovládají koníčky váš život? Dejte pozor na správnou míru. Mánie může zničit vztahy i kariéru", claude: "Posedlost koníčkem může přerůst v nebezpečnou mánii, varují odborníci", chatgpt: "Kdy se zájem mění v posedlost? Tady je návod, jak to poznat" },
+{ id: 46, original: "Tohle jsou nejlepší vyhlídky přímo ve městech. Zveme vás na místa, kam se budete rádi vracet", claude: "Čtyři města s dechberoucími výhledy lákají na pohodlné vyhlídky", chatgpt: "Nejlepší vyhlídky v Česku: Tohle jsou 4 tipy na výlety za úžasnými výhledy" },
+{ id: 47, original: "Jaký je nejlepší prostředek na mastné kuchyňské skříňky? Ten, který si vyrobíte sami", claude: "Zázračná směs na mastné skříňky v kuchyni vás zbaví špíny za pár minut", chatgpt: "Jak odstranit mastnotu z kuchyňských skříněk? Zkuste tento trik se zubní pastou" },
+{ id: 48, original: "Architekti vytvořili na pobřeží útočiště před rušným světem. Odolá i nástrahám přírody", claude: "Luxusní úkryt před bouřemi vyrůstá ze skal na kanadském pobřeží", chatgpt: "Úžasný dům na skále odolá i hurikánu" },
+{ id: 49, original: "Zásuvky musí zůstat při bouřce v klidu! Chraňte je před úderem blesku!", claude: "Blesky ohrožují vaše spotřebiče, ochraňte je před přepětím v zásuvkách", chatgpt: "Bouřka může zničit vaše elektrospotřebiče" },
+{ id: 50, original: "Z Prahy do Soběslavi: Svépomocí postavený dům ve tvaru L nabízí komfort pro rostoucí rodinu", claude: "Mladá rodina opustila Prahu a postavila si svépomocí vysněný dům v jižních Čechách", chatgpt: "Rodina opustila Prahu a postavila si dům v Soběslavi. Podívejte se, jak se jim to povedlo" }
+    ];
+
+    console.log("Data načtena:", titulkyData);
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function createQuestionHTML(data) {
+        const titulky = [
+            { text: data.original, source: 'original' },
+            { text: data.claude, source: 'claude' },
+            { text: data.chatgpt, source: 'chatgpt' }
+        ];
+        const shuffledTitulky = [...titulky];
+        shuffleArray(shuffledTitulky);
+
+        return `
+            <div class="question" data-id="${data.id}">
+                <h3>ID: ${data.id}</h3>
+                ${shuffledTitulky.map((titulek, index) => `
+                    <p><strong>Titulek ${index + 1}:</strong> ${titulek.text}</p>
+                `).join('')}
+                <div class="options">
+                    ${['Nejlepší', 'Druhý nejlepší', 'Nejhorší'].map((label, index) => `
+                        <div class="option">
+                            <label for="${label.toLowerCase().replace(' ', '_')}_${data.id}">${label}:</label>
+                            <select id="${label.toLowerCase().replace(' ', '_')}_${data.id}" name="${label.toLowerCase().replace(' ', '_')}_${data.id}" data-index="${index}">
+                                <option value="">Vyberte</option>
+                                ${shuffledTitulky.map((_, i) => `
+                                    <option value="${shuffledTitulky[i].source}">Titulek ${i + 1}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function initForm() {
+        console.log("Inicializace formuláře");
+        const form = document.getElementById('blindTestForm');
+        form.innerHTML = titulkyData.map(createQuestionHTML).join('') + 
+                         '<button type="submit">Odeslat hodnocení</button>';
+        console.log("Formulář inicializován");
+    }
+
+    function initializeTotalResults() {
+        console.log("Inicializace výsledků");
+        return titulkyData.map(data => ({
+            id: data.id,
+            original: { best: 0, second: 0, worst: 0 },
+            claude: { best: 0, second: 0, worst: 0 },
+            chatgpt: { best: 0, second: 0, worst: 0 }
+        }));
+    }
+
+    function collectResults(event) {
+        console.log("Sbírání výsledků");
+        event.preventDefault();
+        let totalResults = JSON.parse(localStorage.getItem('totalResults')) || initializeTotalResults();
+        console.log("Načtené výsledky:", totalResults);
+        
+        document.querySelectorAll('.question').forEach(questionDiv => {
+            const id = parseInt(questionDiv.dataset.id);
+            const result = totalResults.find(r => r.id === id);
+            if (!result) {
+                console.error(`Nenalezen výsledek pro ID ${id}`);
+                return;
+            }
+            questionDiv.querySelectorAll('select').forEach(select => {
+                if (select.value) {
+                    const selectedSource = select.value; // 'original', 'claude', nebo 'chatgpt'
+                    const rating = ['best', 'second', 'worst'][parseInt(select.dataset.index)];
+                    result[selectedSource][rating]++;
+                    console.log(`Přidáno hodnocení: ID ${id}, ${selectedSource} ${rating}`);
+                } else {
+                    console.log(`Žádné hodnocení pro ID ${id}, ${select.name}`);
+                }
+            });
+        });
+        
+        localStorage.setItem('totalResults', JSON.stringify(totalResults));
+        console.log("Uložené výsledky:", totalResults);
+        alert('Hodnocení bylo zaznamenáno a přidáno k celkovým výsledkům. Zkontrolujte konzoli pro detaily.');
+    }
+
+    function exportResults() {
+        console.log("Exportování výsledků");
+        const totalResults = JSON.parse(localStorage.getItem('totalResults')) || [];
+        console.log("Načtené výsledky pro export:", totalResults);
+        
+        if (totalResults.length === 0) {
+            alert("Žádná data k exportu. Proveďte nejprve nějaká hodnocení.");
+            return;
+        }
+        
+        let csv = "ID,Original Best,Original Second,Original Worst,Claude Best,Claude Second,Claude Worst,ChatGPT Best,ChatGPT Second,ChatGPT Worst\n";
+        
+        totalResults.forEach(result => {
+            csv += `${result.id},`;
+            csv += `${result.original.best},${result.original.second},${result.original.worst},`;
+            csv += `${result.claude.best},${result.claude.second},${result.claude.worst},`;
+            csv += `${result.chatgpt.best},${result.chatgpt.second},${result.chatgpt.worst}\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'blind_test_results.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        console.log("Export dokončen");
+    }
+
+    function resetData() {
+        localStorage.removeItem('totalResults');
+        localStorage.setItem('totalResults', JSON.stringify(initializeTotalResults()));
+        console.log("Data resetována");
+        alert("Data byla resetována. Můžete začít nové hodnocení.");
+    }
+
+    function showCurrentResults() {
+        const totalResults = JSON.parse(localStorage.getItem('totalResults')) || [];
+        console.log("Aktuální výsledky:", totalResults);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM načten, inicializace formuláře");
+        initForm();
+        document.getElementById('blindTestForm').addEventListener('submit', collectResults);
+        document.getElementById('exportButton').addEventListener('click', exportResults);
+        document.getElementById('resetButton').addEventListener('click', resetData);
+        document.getElementById('showResultsButton').addEventListener('click', showCurrentResults);
+    });
+
+    console.log("Script dokončen");
+    </script>
+</body>
+</html>
